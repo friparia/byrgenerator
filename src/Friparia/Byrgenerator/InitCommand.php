@@ -61,27 +61,93 @@ class InitCommand extends Command {
 	}
 
     protected function doInit(){
-        // $migration_file = $this->laravel->path."/database/migrations/".date('Y_m_d_His')."_init_table.php";
-        // $output =  with(app())['view']->make('byrgenerator::generators.init_table');
-        // if( ! file_exists( $migration_file ) )
-        // {
-        //     $fs = fopen($migration_file, 'x');
-        //     if ( $fs )
-        //     {
-        //         fwrite($fs, $output);
-        //         fclose($fs);
-        //         // return true;
-        //     }
-        //     else
-        //     {
-        //         return false;
-        //     }
-        // }
-        // else
-        // {
-        //     return false;
-        // }
-        // $this->call('migrate');
+        $this->line('');
+        $this->info('init migrate');
+        $migration_file = $this->laravel->path."/database/migrations/".date('Y_m_d_His')."_init_table.php";
+        $output =  with(app())['view']->make('byrgenerator::generators.init_table');
+        if( ! file_exists( $migration_file ) )
+        {
+            $fs = fopen($migration_file, 'x');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+                // return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->call('migrate');
+        $this->info('init model');
+        $user_model_file =  $this->laravel->path."/models/User.php";
+        $output = with(app())['view']->make('byrgenerator::generators.init_user_model');
+        if( ! file_exists( $user_model_file ) )
+        {
+            $fs = fopen($user_model_file, 'x');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+                // return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->info('init controller');
+        $user_controller_file =  $this->laravel->path."/controllers/UserController.php";
+        $output = with(app())['view']->make('byrgenerator::generators.init_user_controller');
+        if( ! file_exists( $user_controller_file ) )
+        {
+            $fs = fopen($user_controller_file, 'x');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+                // return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->info('init routes');
+        $route_file =  $this->laravel->path."/routes.php";
+        $output = with(app())['view']->make('byrgenerator::generators.init_routes');
+        if( file_exists( $route_file ) )
+        {
+            $fs = fopen($route_file, 'a');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+                // return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->call('asset:publish', array('--bench' => 'friparia/byrgenerator'));
         return true;
     }
 }
