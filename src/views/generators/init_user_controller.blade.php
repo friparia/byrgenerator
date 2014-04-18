@@ -2,7 +2,7 @@
 
 class UserController extends BaseController{
     public function getLogin(){
-        return View::make('byrgenerator::user.login', array('msg' => Input::get('msg')));
+        return View::make('user.login', array('msg' => Input::get('msg')));
     }
 
     public function postLogin(){
