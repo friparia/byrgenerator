@@ -1,4 +1,4 @@
-<?php
+<?php namespace Friparia\Byrgenerator;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,7 +37,15 @@ class GenerateCommand extends Command {
 	 */
 	public function fire()
 	{
-		//
+        if($this->confirm('Generate?[Yes|no]')){
+            $this->line('');
+            if($this->generate()){
+                $this->info('generated');
+            }
+            else{
+                $this->error('error happens');
+            }
+        }
 	}
 
 	/**
@@ -45,23 +53,135 @@ class GenerateCommand extends Command {
 	 *
 	 * @return array
 	 */
-	protected function getArguments()
-	{
-		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
-		);
-	}
+	// protected function getArguments()
+	// {
+	// 	return array(
+	// 		array('example', InputArgument::REQUIRED, 'An example argument.'),
+	// 	);
+	// }
 
 	/**
 	 * Get the console command options.
 	 *
 	 * @return array
 	 */
-	protected function getOptions()
-	{
-		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
-		);
-	}
+	// protected function getOptions()
+	// {
+	// 	return array(
+	// 		array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+    // 	);
+	// }
 
+    protected function generate(){
+        // if(!$this->generateController('role')){
+            // return false;
+        // }
+        if(!$this->generateView('role')){
+            return false;
+        }
+        return true;
+    }
+    
+    protected function generateController($name){
+        $this->line('');
+        $this->info('generate controller');
+        $path = $this->laravel->path."/controllers/".ucfirst($name)."Controller.php";
+        $output = with(app())['view']->make("byrgenerator::generators.template_controller", array(
+            'classname' => ucfirst($name),
+            'name' => $name,
+            'attributes' => $this->getOwnAttributes($name)
+        ));
+
+        if( !file_exists( $path ) )
+        {
+            $fs = fopen($path, 'x');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->info('success generate '.ucfirst($name).' Controller...');
+        return true;
+    }
+
+    protected function generateModel(){
+    }
+
+    protected function generateView($name){
+        $this->line('');
+        $this->info('generate view');
+        $path = $this->laravel->path."/views/".$name."/index.blade.php";
+        $output = with(app())['view']->make("byrgenerator::generators.template_view", array(
+            'name' => $name,
+            'classname' => ucfirst($name),
+            'description' => $this->getOwnDescription($name),
+            'attributes' => $this->getOwnAttributes($name),
+            'getlisturl' => action(ucfirst($name).'Controller@getList'),
+            'getinfourl' => action(ucfirst($name).'Controller@getInfo'),
+            'postdeleteurl' => action(ucfirst($name).'Controller@postDelete'),
+            'poststoreurl' => action(ucfirst($name).'Controller@postStore'),
+            'postupdateurl' => action(ucfirst($name).'Controller@postUpdate')
+        ));
+
+        // mkdir($this->laravel->path."/views/".$name, 0755);
+        if( !file_exists( $path ) )
+        {
+            $fs = fopen($path, 'x');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->info('success generate '.ucfirst($name).' View...');
+        return true;
+    }
+
+    protected function generateRoute(){
+        if( file_exists( $path ) )
+        {
+            $fs = fopen($path, 'a');
+            if ( $fs )
+            {
+                fwrite($fs, $output);
+                fclose($fs);
+                // return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        $this->info('success init '.$name.' '.$type.' ...');
+    }
+
+
+    protected function getOwnAttributes($name){
+        return with(app())['config']->get("byrgenerator::resource.attributes");
+    }
+
+    protected function getOwnDescription($name){
+        return with(app())['config']->get("byrgenerator::resource.description");
+    }
 }

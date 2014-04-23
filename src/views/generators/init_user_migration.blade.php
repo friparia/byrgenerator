@@ -24,6 +24,7 @@ class InitUserTable extends Migration {
         Schema::create('roles', function($table){
             $table->increments('id');
             $table->string('name')->unique();
+            $table->string('description');
             $table->timestamps();
         });
 
@@ -40,8 +41,7 @@ class InitUserTable extends Migration {
         Schema::create('permissions', function($table){
             $table->increments('id');
             $table->string('name');
-            $table->string('method');
-            $table->string('display_name');
+            $table->string('description');
             $table->timestamps();
         });
 

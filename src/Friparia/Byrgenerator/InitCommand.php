@@ -40,7 +40,7 @@ class InitCommand extends Command {
         if($this->confirm('Run Init?[Yes|no]')){
             $this->line('');
             $this->info('Creating Init ...');
-            if($this->doInit()){
+            if($this->init()){
                 $this->info('init created');
             }else{
                 $this->error('error happens');
@@ -60,7 +60,7 @@ class InitCommand extends Command {
 		);
 	}
 
-    protected function doInit(){
+    protected function init(){
         $generation = array(
             array('user', 'migration'),
             array('user', 'model'),

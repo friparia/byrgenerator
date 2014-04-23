@@ -42,8 +42,13 @@ class ByrgeneratorServiceProvider extends ServiceProvider {
             return new InitCommand($app);
         });
 
+        $this->app['command.byrgenerator.generate'] = $this->app->share(function($app){
+            return new GenerateCommand($app);
+        });
+
         $this->commands(
-            'command.byrgenerator.init'
+            'command.byrgenerator.init',
+            'command.byrgenerator.generate'
         );
 	}
 
