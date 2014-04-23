@@ -1,4 +1,5 @@
 {{ '@'.'extends("master")' }}
+
 {{ '@'.'section("content")' }}
 
 <noscript>
@@ -16,7 +17,7 @@
       <a href="/">主页</a> <span class="divider">/</span>
       </li>
       <li>
-      <a href="{{ $getlisturl }}">{{ $description }}管理</a>
+      <a href="{{ '{'.'{ action("'.$classname.'Controller@getList'.'")'.' }'.'}' }}">{{ $description }}管理</a>
       </li>
     </ul>
   </div>
@@ -77,7 +78,7 @@
       @foreach ($attributes as $attribute)
       <tr>
         <td>{{ $attribute['description'] }}</td>
-        <td id="view{{ $name.$attribute['name'] }}"></td>
+        <td id="view{{ $attribute['name'] }}"></td>
       </tr>
       @endforeach
     </table>
@@ -98,7 +99,7 @@
         <input type="hidden" id="edit{{ $name }}id" name="id"/>
         @foreach ($attributes as $attribute)
         <div class="control-group">
-          <label class="control-label"></label>
+          <label class="control-label">{{ $attribute['description'] }}</label>
           <div class="controls">
             <input id="edit{{ $attribute['name'] }}" name="{{ $attribute['name'] }}" type="text">
           </div>
@@ -141,7 +142,7 @@
 
     $('.btn-view').click(function(){
       $('#viewModal').modal('show');
-      $.get('{{ $getinfourl }}', { id: $(this).attr('data-id') }, function(ret){
+      $.get('{{ '{'.'{ action("'.$classname.'Controller@getInfo'.'")'.' }'.'}' }}', { id: $(this).attr('data-id') }, function(ret){
         if(ret.success == true){
           @foreach( $attributes as $attribute)
           $('#view{{ $attribute['name'] }}').html(ret.data.{{ $attribute['name'] }});
@@ -156,7 +157,7 @@
 
     $('.btn-edit').click(function(){
       $('#editModal').modal('show');
-      $.get('{{ $getinfourl }}', { id: $(this).attr('data-id') }, function(ret){
+      $.get('{{ '{'.'{ action("'.$classname.'Controller@getInfo'.'")'.' }'.'}' }}', { id: $(this).attr('data-id') }, function(ret){
         if(ret.success == true){
           @foreach( $attributes as $attribute)
           $('#edit{{ $attribute['name'] }}').val(ret.data.{{ $attribute['name'] }});
@@ -167,7 +168,7 @@
 
     $('.btn-delete').click(function(){
       if(confirm("确认删除？")){
-        $.post('{{ $postdeleteurl }}', { id : $(this).attr("data-id") }, function(ret){
+        $.post('{{ '{'.'{ action("'.$classname.'Controller@postDelete'.'")'.' }'.'}' }}', { id : $(this).attr("data-id") }, function(ret){
           if(ret.success){
             alert("删除成功");
             location.reload();
@@ -182,7 +183,7 @@
     $("input:checkbox, input:radio, input:file").not('[data-no-uniform="true"],#uniform-is-ajax').uniform();
 
     $('#{{ $name }}AddSave').click(function(){
-      $.post('{{ $poststoreurl }}', $('#{{ $name }}AddForm').serialize(), function(ret){
+      $.post('{{ '{'.'{ action("'.$classname.'Controller@postStore'.'")'.' }'.'}' }}', $('#{{ $name }}AddForm').serialize(), function(ret){
         if(ret.success){
           alert('添加成功！');
           location.reload();
@@ -200,7 +201,7 @@
     });
 
     $('#{{ $name }}EditSave').click(function(){
-      $.post('{{ $postupdateurl }}', $('#{{ $name }}EditForm').serialize(), function(ret){
+      $.post('{{ '{'.'{ action("'.$classname.'Controller@postUpdate'.'")'.' }'.'}'  }}', $('#{{ $name }}EditForm').serialize(), function(ret){
         if(ret.success){
           alert('修改成功！');
           location.reload();

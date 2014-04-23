@@ -73,10 +73,13 @@ class GenerateCommand extends Command {
 	// }
 
     protected function generate(){
-        // if(!$this->generateController('role')){
-            // return false;
-        // }
+        if(!$this->generateController('role')){
+            return false;
+        }
         if(!$this->generateView('role')){
+            return false;
+        }
+        if(!$this->generateRoute('role')){
             return false;
         }
         return true;
@@ -125,14 +128,9 @@ class GenerateCommand extends Command {
             'classname' => ucfirst($name),
             'description' => $this->getOwnDescription($name),
             'attributes' => $this->getOwnAttributes($name),
-            'getlisturl' => action(ucfirst($name).'Controller@getList'),
-            'getinfourl' => action(ucfirst($name).'Controller@getInfo'),
-            'postdeleteurl' => action(ucfirst($name).'Controller@postDelete'),
-            'poststoreurl' => action(ucfirst($name).'Controller@postStore'),
-            'postupdateurl' => action(ucfirst($name).'Controller@postUpdate')
         ));
 
-        // mkdir($this->laravel->path."/views/".$name, 0755);
+        mkdir($this->laravel->path."/views/".$name, 0755);
         if( !file_exists( $path ) )
         {
             $fs = fopen($path, 'x');
@@ -154,7 +152,14 @@ class GenerateCommand extends Command {
         return true;
     }
 
-    protected function generateRoute(){
+    protected function generateRoute($name){
+        $this->line('');
+        $this->info('generate route');
+        $path = $this->laravel->path."/routes.php";
+        $output = with(app())['view']->make("byrgenerator::generators.template_route", array(
+            'name' => $name,
+            'classname' => ucfirst($name),
+            ));
         if( file_exists( $path ) )
         {
             $fs = fopen($path, 'a');
@@ -173,7 +178,8 @@ class GenerateCommand extends Command {
         {
             return false;
         }
-        $this->info('success init '.$name.' '.$type.' ...');
+        $this->info('success generate '.$name.' route ...');
+        return true;
     }
 
 
