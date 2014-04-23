@@ -73,13 +73,13 @@ class GenerateCommand extends Command {
 	// }
 
     protected function generate(){
-        if(!$this->generateController('permission')){
+        if(!$this->generateController('project')){
             return false;
         }
-        if(!$this->generateView('permission')){
+        if(!$this->generateView('project')){
             return false;
         }
-        if(!$this->generateRoute('permission')){
+        if(!$this->generateRoute('project')){
             return false;
         }
         return true;

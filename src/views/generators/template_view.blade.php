@@ -37,6 +37,7 @@
             @foreach ($attributes as $attribute)
               <th>{{ $attribute['description'] }}</th>
             @endforeach
+              <th>操作</th>
             </tr>
           </thead>   
           <tbody>
@@ -63,6 +64,9 @@
             {{ '@'.'endforeach' }}
           </tbody>
         </table>            
+        <div class="span12 center">
+        {{ '{'.'{ $'.$name.'s->links() }'.'}' }}
+        </div>
       </div>
     </div><!--/span-->
   </div><!--/row-->
@@ -159,6 +163,7 @@
       $('#editModal').modal('show');
       $.get('{{ '{'.'{ action("'.$classname.'Controller@getInfo'.'")'.' }'.'}' }}', { id: $(this).attr('data-id') }, function(ret){
         if(ret.success == true){
+          $('#editid').val(ret.data.id);
           @foreach( $attributes as $attribute)
           $('#edit{{ $attribute['name'] }}').val(ret.data.{{ $attribute['name'] }});
           @endforeach

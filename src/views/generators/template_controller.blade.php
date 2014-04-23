@@ -6,8 +6,8 @@ class {{ $classname }}Controller extends BaseController{
         if(!Auth::user()->can('{{ $name }}.read')){
             App::abort(403);
         }
-        ${{ $name }}s = {{ $classname }}::all();
-        return View::make('master')->nest('content', '{{ $name }}.index', array('{{ $name }}s' => ${{ $name }}s))->nest('sidebar', 'sidebar', array('active' => {{ $name }} ))->nest('navbar', 'navbar');
+        ${{ $name }}s = {{ $classname }}::paginate(20);
+        return View::make('master')->nest('content', '{{ $name }}.index', array('{{ $name }}s' => ${{ $name }}s))->nest('sidebar', 'sidebar', array('active' => '{{ $name }}' ))->nest('navbar', 'navbar');
     }
 
     public function getInfo(){
