@@ -1,12 +1,12 @@
 <?php
 
 return array(
-    'name' => 'role',
-    'description' => '角色',
+    'name' => 'permission',
+    'description' => '权限',
     'attributes' => array(
         'name' => array(
             'name' => 'name',
-            'description' => '角色',
+            'description' => '权限',
             ),
         'description' => array(
             'name' => 'description',

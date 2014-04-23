@@ -7,7 +7,7 @@ class {{ $classname }}Controller extends BaseController{
             App::abort(403);
         }
         ${{ $name }}s = {{ $classname }}::all();
-        return View::make('master')->nest('content', '{{ $name }}.index', array('{{ $name }}s' => ${{ $name }}s))->nest('sidebar', 'sidebar')->nest('navbar', 'navbar');
+        return View::make('master')->nest('content', '{{ $name }}.index', array('{{ $name }}s' => ${{ $name }}s))->nest('sidebar', 'sidebar', array('active' => {{ $name }} ))->nest('navbar', 'navbar');
     }
 
     public function getInfo(){
