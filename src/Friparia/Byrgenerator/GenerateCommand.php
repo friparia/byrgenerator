@@ -39,7 +39,7 @@ class GenerateCommand extends Command {
 	{
         if($this->confirm('Generate?[Yes|no]')){
             $this->line('');
-            if($this->generate()){
+            if($this->generate('group')){
                 $this->info('generated');
             }
             else{
@@ -72,14 +72,14 @@ class GenerateCommand extends Command {
     // 	);
 	// }
 
-    protected function generate(){
-        if(!$this->generateController('project')){
+    protected function generate($name){
+        if(!$this->generateController($name)){
             return false;
         }
-        if(!$this->generateView('project')){
+        if(!$this->generateView($name)){
             return false;
         }
-        if(!$this->generateRoute('project')){
+        if(!$this->generateRoute($name)){
             return false;
         }
         return true;

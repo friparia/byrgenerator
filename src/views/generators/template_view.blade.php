@@ -100,7 +100,7 @@
   <div class="modal-body">
     <form class="form-horizontal" id="{{ $name }}EditForm">
       <fieldset>
-        <input type="hidden" id="edit{{ $name }}id" name="id"/>
+        <input type="hidden" id="editid" name="id"/>
         @foreach ($attributes as $attribute)
         <div class="control-group">
           <label class="control-label">{{ $attribute['description'] }}</label>
