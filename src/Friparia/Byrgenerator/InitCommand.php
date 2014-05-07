@@ -64,6 +64,8 @@ class InitCommand extends Command {
         $generation = array(
             array('user', 'migration'),
             array('user', 'model'),
+            array('role', 'model'),
+            array('permission', 'model'),
             array('user', 'controller'),
             array('master', 'view'),
             array('user.login', 'view'),
