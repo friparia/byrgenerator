@@ -62,13 +62,16 @@ class InitCommand extends Command {
 
     protected function init(){
         $generation = array(
-            array('user', 'migration'),
-            array('user', 'model'),
-            array('role', 'model'),
-            array('permission', 'model'),
-            array('user', 'controller'),
-            array('master', 'view'),
-            array('user.login', 'view'),
+            // array('user', 'migration'),
+            // array('user', 'model'),
+            // array('role', 'model'),
+            // array('permission', 'model'),
+            // array('user', 'controller'),
+            // array('master', 'view'),
+            // array('user.login', 'view'),
+            array('user.index', 'view'),
+            array('permission.index', 'view'),
+            array('role.index', 'view'),
             array('', 'routes'),
         );
         foreach($generation as $value)
@@ -106,6 +109,10 @@ class InitCommand extends Command {
                 $src = explode('.', $name);
                 $name = array_pop($src);
                 $folder = implode('/', $src);
+                if(!empty($folder) && !file_exists($this->laravel->path."/views/".$folder)){
+                    mkdir($this->laravel->path."/views/".$folder, 0755);
+                }
+
                 $path = $this->laravel->path."/views/".$folder."/".$name.".blade.php";
                 $name = 'init_'.$name;
                 array_push($src, $name);
